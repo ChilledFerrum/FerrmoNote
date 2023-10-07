@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QPushButton
-from PyQt6.QtGui import QImage, QPixmap, QIcon, QFont
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtGui import QIcon
+from PyQt6.QtCore import QSize
 
 
 class FerrmoNote(QPushButton):

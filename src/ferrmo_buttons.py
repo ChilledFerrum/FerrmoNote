@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QPushButton
 from PyQt6.QtCore import QEvent
-from PyQt6.QtGui import QFont, QColor
+from PyQt6.QtGui import QFont
 
 
 class FerrmoButton(QPushButton):

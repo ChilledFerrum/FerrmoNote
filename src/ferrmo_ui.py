@@ -62,8 +62,6 @@ class Ferrmo(QWidget):
         self.mainLayout.setContentsMargins(0, 0, 0, 0)
         self.mainLayout.setSpacing(0)
 
-        # self.mainFrame = GradientBackground(self, self.width, self.height, self.gradient_start, self.gradient_end)
-        # self.mainFrame.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)  # Set size policy
 
         screen = QApplication.primaryScreen()
         screen_geometry = screen.availableGeometry()
@@ -74,7 +72,6 @@ class Ferrmo(QWidget):
 
         self.setGeometry(offset_x, offset_y, self.width, self.height)
         self.setWindowOpacity(0.93)
-        # self.updateBackground()
 
     def createMainUI(self):
         # Side Bar Content
@@ -85,61 +82,17 @@ class Ferrmo(QWidget):
         self.frameSideBar.setMaximumHeight(self.sideBar_minHeight)
         self.frameSideBar.setStyleSheet(f"background-color: {menuColor};")
 
-        # Main Frame Initializing
+
         self.gridLayout = QGridLayout()
+        # Main Frame Initializing
         self.mainFrameUI = ScrollableTransparentBackground(self.width - 30, self.height - self.sideBar_minHeight - 30,
                                                            self.gridLayout, self.gradient_start, self.gradient_end,
                                                            self)
         self.notesList = []
 
-        buttonLayout = QHBoxLayout()
-        self.buttonViewNotes = FerrmoButton(self.frameSideBar,
-                                            text="View Notes",
-                                            font_size=10,
-                                            bg=menuColor, pressedColor="#036194")
-        self.buttonViewNotes.clicked.connect(self.viewNotes)
-        buttonLayout.addWidget(self.buttonViewNotes)
-
-        self.buttonAddNote = FerrmoButton(self.frameSideBar,
-                                          text="Add Notes",
-                                          font_size=10,
-                                          bg=menuColor, pressedColor="#069647")
-        self.buttonAddNote.clicked.connect(self.addNote)
-        buttonLayout.addWidget(self.buttonAddNote)
-
-        self.buttonSearchNote = FerrmoButton(self.frameSideBar,
-                                             text="Search Note",
-                                             font_size=10,
-                                             bg=menuColor, pressedColor="#036194")
-        self.buttonSearchNote.clicked.connect(self.searchNote)
-        buttonLayout.addWidget(self.buttonSearchNote)
-
-        self.buttonSaveNotes = FerrmoButton(self.frameSideBar,
-                                            text="Save Notes",
-                                            font_size=10,
-                                            bg=menuColor, pressedColor="#069647")
-        self.buttonSaveNotes.clicked.connect(self.saveNote)
-        buttonLayout.addWidget(self.buttonSaveNotes)
-
-        self.buttonDeleteNote = FerrmoButton(self.frameSideBar,
-                                             text="Delete Note",
-                                             font_size=10,
-                                             bg=menuColor, pressedColor='#940303')
-        self.buttonDeleteNote.clicked.connect(self.deleteNote)
-        buttonLayout.addWidget(self.buttonDeleteNote)
-
-        self.buttonSettings = FerrmoButton(self.frameSideBar,
-                                           text="Settings",
-                                           bg=menuColor, pressedColor="#036194")
-        self.buttonSettings.clicked.connect(self.settings)
-        buttonLayout.addWidget(self.buttonSettings)
-
-        self.buttonExit = FerrmoButton(self.frameSideBar,
-                                       text="Exit",
-                                       font_size=17,
-                                       bg=menuColor, pressedColor="orange")
-        self.buttonExit.clicked.connect(self.exit)
-        buttonLayout.addWidget(self.buttonExit)
+        self.init_menu_buttons()
+        self.setup_menu_button_connections()
+        buttonLayout = self.add_menu_button_widgets()
 
         self.frameSideBar.setContentsMargins(0, 0, 0, 0)
         self.frameSideBar.setLayout(buttonLayout)
@@ -180,7 +133,6 @@ class Ferrmo(QWidget):
         print("Clicked Exit!")
         sys.exit(1)
 
-    # def
 
     def update_notes(self):
         x = -80
@@ -208,9 +160,58 @@ class Ferrmo(QWidget):
             self.gridLayout.addWidget(note, note.grid_pos[0], note.grid_pos[1])
         self.mainFrameUI.setLayout(self.gridLayout)
 
+    def init_menu_buttons(self):
+        self.buttonViewNotes = FerrmoButton(self.frameSideBar,
+                                            text="View Notes",
+                                            font_size=10,
+                                            bg=menuColor, pressedColor="#036194")
+        self.buttonAddNote = FerrmoButton(self.frameSideBar,
+                                          text="Add Notes",
+                                          font_size=10,
+                                          bg=menuColor, pressedColor="#069647")
+        self.buttonSearchNote = FerrmoButton(self.frameSideBar,
+                                             text="Search Note",
+                                             font_size=10,
+                                             bg=menuColor, pressedColor="#036194")
+        self.buttonSaveNotes = FerrmoButton(self.frameSideBar,
+                                            text="Save Notes",
+                                            font_size=10,
+                                            bg=menuColor, pressedColor="#069647")
+        self.buttonDeleteNote = FerrmoButton(self.frameSideBar,
+                                             text="Delete Note",
+                                             font_size=10,
+                                             bg=menuColor, pressedColor='#940303')
+        self.buttonSettings = FerrmoButton(self.frameSideBar,
+                                           text="Settings",
+                                           bg=menuColor, pressedColor="#036194")
+        self.buttonExit = FerrmoButton(self.frameSideBar,
+                                       text="Exit",
+                                       font_size=17,
+                                       bg=menuColor, pressedColor="orange")
+
+    def setup_menu_button_connections(self):
+        self.buttonViewNotes.clicked.connect(self.viewNotes)
+        self.buttonAddNote.clicked.connect(self.addNote)
+        self.buttonSearchNote.clicked.connect(self.searchNote)
+        self.buttonSaveNotes.clicked.connect(self.saveNote)
+        self.buttonDeleteNote.clicked.connect(self.deleteNote)
+        self.buttonSettings.clicked.connect(self.settings)
+        self.buttonExit.clicked.connect(self.exit)
+
+    def add_menu_button_widgets(self):
+        buttonLayout = QHBoxLayout()  # Define Horizontal menu Layout
+        buttonLayout.addWidget(self.buttonViewNotes)
+        buttonLayout.addWidget(self.buttonAddNote)
+        buttonLayout.addWidget(self.buttonSearchNote)
+        buttonLayout.addWidget(self.buttonSaveNotes)
+        buttonLayout.addWidget(self.buttonDeleteNote)
+        buttonLayout.addWidget(self.buttonSettings)
+        buttonLayout.addWidget(self.buttonExit)
+        return buttonLayout
+
     """
         EVENTS
     """
+
     def resizeEvent(self, event):
-        # self.mainFrameUI.updateGradient(self.width, self.height, self.gradient_start, self.gradient_end)
         pass
