@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QScrollArea, QVBoxLayout
 from PyQt6.QtCore import Qt
-from ferrmo_style_util import GradientBackground
+from style_util import GradientBackground
 
 
 class ScrollableTransparentBackground(QScrollArea):
