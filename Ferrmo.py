@@ -1,4 +1,4 @@
-from src.ui import Ferrmo
+from src.app_ui import Ferrmo
 from PyQt6.QtWidgets import QApplication
 import sys
 

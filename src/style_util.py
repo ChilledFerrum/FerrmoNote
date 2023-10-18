@@ -16,7 +16,8 @@ class GradientBackground(QWidget):
 
         self.setLayout(layout)
 
-    def updateGradient(self, width, height, gradientStart, gradientEnd):
+    def updateGradient(self, width, height, gradientStart, gradientEnd): # is called, 1) When App is Resized. 2) When App is instantiated
+        # Updates the fields of the GradientBackground class and initiates a repaint event
         self.width = width
         self.height = height
         self.startColor = gradientStart
@@ -24,7 +25,7 @@ class GradientBackground(QWidget):
 
         self.repaint()
 
-    def paintEvent(self, event):
+    def paintEvent(self, event): # Main Paint or Repaint event of the background
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
@@ -38,6 +39,6 @@ class GradientBackground(QWidget):
         gradient.setColorAt(1, QColor(sr, sg, sb))
         painter.fillRect(self.rect(), gradient)
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, event):  # Main Event Function, is called, 1) When App is Resized. 2) When App is instantiated
         self.updateGradient(self.width, self.height, self.startColor, self.endColor)
         super().resizeEvent(event)

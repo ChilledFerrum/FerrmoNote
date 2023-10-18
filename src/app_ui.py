@@ -16,7 +16,7 @@ class Ferrmo(QWidget):
         self.mainFrame = None  # Entire App Frame
 
         self.mainFrameUI = None  # Main Frame UI Contains Note History
-        self.scroll_area = QScrollArea()  # Scroll area for mainFrameUI
+        self.scroll_area = QScrollArea(self)  # Scroll area for mainFrameUI
 
         self.gridLayout = None  # Grid Layout to hold Note History
         self.setWindowTitle("Ferrmo")
@@ -29,7 +29,7 @@ class Ferrmo(QWidget):
         self.update()
 
         self.openedUIs = dict({
-            "viewNotes": False,
+            "viewNote": False,
             "addNotes": False,
             "searchNote": False,
             "saveNotes": False,
@@ -45,7 +45,7 @@ class Ferrmo(QWidget):
         self.frameSideBar = None
         self.notesList = []
 
-        self.buttonViewNotes = None
+        self.buttonViewNote = None
         self.buttonAddNote = None
         self.buttonSearchNote = None
         self.buttonSaveNotes = None
@@ -100,9 +100,8 @@ class Ferrmo(QWidget):
         self.mainLayout.addWidget(self.mainFrameUI)
         self.mainLayout.addWidget(self.frameSideBar)
 
-    def viewNotes(self, event):
-        self.update_notes()
-        print("Clicked View Notes!")
+    def viewNote(self):
+        pass
 
     def addNote(self, event):
         new_Note = FerrmoNote(self)
@@ -115,6 +114,7 @@ class Ferrmo(QWidget):
         new_Note.changeName()
 
         self.notesList.append(new_Note)
+        self.update_notes()
         print("Clicked add Note!")
 
     def searchNote(self, event):
@@ -124,8 +124,13 @@ class Ferrmo(QWidget):
         print("Clicked Save Note!")
 
     def deleteNote(self, event):
-        print("Clicked Delete Note!")
+        for note in self.notesList:
+            if note.selected:
+                note.selected = False
+                self.notesList.remove(note) # Remove from notes List
+                note.deleteLater() # Deletes Widget on event loop
 
+        self.update_notes()
     def settings(self, event):
         print("Clicked Settings!")
 
@@ -160,9 +165,15 @@ class Ferrmo(QWidget):
             self.gridLayout.addWidget(note, note.grid_pos[0], note.grid_pos[1])
         self.mainFrameUI.setLayout(self.gridLayout)
 
+    def selected_button(self):
+        for note in self.notesList:
+            if note.selected:
+                note.selected = False
+                note.button_unselect()
+
     def init_menu_buttons(self):
-        self.buttonViewNotes = FerrmoButton(self.frameSideBar,
-                                            text="View Notes",
+        self.buttonViewNote = FerrmoButton(self.frameSideBar,
+                                            text="View Note",
                                             font_size=10,
                                             bg=menuColor, pressedColor="#036194")
         self.buttonAddNote = FerrmoButton(self.frameSideBar,
@@ -190,7 +201,7 @@ class Ferrmo(QWidget):
                                        bg=menuColor, pressedColor="orange")
 
     def setup_menu_button_connections(self):
-        self.buttonViewNotes.clicked.connect(self.viewNotes)
+        self.buttonViewNote.clicked.connect(self.viewNote)
         self.buttonAddNote.clicked.connect(self.addNote)
         self.buttonSearchNote.clicked.connect(self.searchNote)
         self.buttonSaveNotes.clicked.connect(self.saveNote)
@@ -200,7 +211,7 @@ class Ferrmo(QWidget):
 
     def add_menu_button_widgets(self):
         buttonLayout = QHBoxLayout()  # Define Horizontal menu Layout
-        buttonLayout.addWidget(self.buttonViewNotes)
+        buttonLayout.addWidget(self.buttonViewNote)
         buttonLayout.addWidget(self.buttonAddNote)
         buttonLayout.addWidget(self.buttonSearchNote)
         buttonLayout.addWidget(self.buttonSaveNotes)
