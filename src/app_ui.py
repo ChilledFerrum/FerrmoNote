@@ -111,8 +111,8 @@ class Ferrmo(QWidget):
             new_Note.id = self.notesList[-1].id + 1
         else:
             new_Note.id = 0
-        new_Note.changeName()
 
+        new_Note.init_button_name()
         self.notesList.append(new_Note)
         self.update_notes()
         print("Clicked add Note!")
@@ -127,6 +127,7 @@ class Ferrmo(QWidget):
         for note in self.notesList:
             if note.selected:
                 note.selected = False
+                print(f"Deleted Note {note.id}")
                 self.notesList.remove(note) # Remove from notes List
                 note.deleteLater() # Deletes Widget on event loop
 
@@ -165,10 +166,9 @@ class Ferrmo(QWidget):
             self.gridLayout.addWidget(note, note.grid_pos[0], note.grid_pos[1])
         self.mainFrameUI.setLayout(self.gridLayout)
 
-    def selected_button(self):
+    def unselect_selected_button(self):
         for note in self.notesList:
             if note.selected:
-                note.selected = False
                 note.button_unselect()
 
     def init_menu_buttons(self):

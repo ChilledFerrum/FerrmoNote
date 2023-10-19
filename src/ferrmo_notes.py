@@ -42,15 +42,14 @@ class FerrmoNote(QWidget):
         self.setStyleSheet(
             "background-color: rgba(255, 255, 255, 0);"
             # "border: 1px solid black;"
-            "padding-left: 1px;"
+            "margin-left: 2px;"
         )
 
         font = QFont("Segoe UI", 9)
         font.setBold(True)
-
-
         self.icon_label.setFont(font)
         self.icon_label.setText(f"Button {self.id}")
+
         self.button.setIcon(QIcon("style/note_leave.png"))
 
         self.button_layout.addWidget(self.button)
@@ -60,27 +59,39 @@ class FerrmoNote(QWidget):
 
 
     def button_select(self):
-        print(f"Button Selected {self.id}")
-        self._parent.selected_button() # Removes current selected button
+        self._parent.unselect_selected_button()  # Removes current selected button
         self.selected = True
+        print(f"Button Selected {self.id}")
+
+
+        font = QFont("Segoe UI", 10)
+        font.setBold(True)
+        self.icon_label.setFont(font)
+        self.icon_label.setStyleSheet("color: rgb(0,255,0);")
+        self.button.setIconSize(QSize(self._width+15, self._height+15))
         self.button.setIcon(QIcon("style/note_selected.png"))
 
     def button_unselect(self):
         self.selected = False
+        font = QFont("Segoe UI", 9)
+        font.setBold(True)
+        self.icon_label.setFont(font)
+        self.icon_label.setStyleSheet("color: rgb(0,0,0);")
+
         self.button.setIcon(QIcon("style/note_leave.png"))
 
-    def changeName(self):
-        font = QFont("Segoe UI", 9)
+
+    def init_button_name(self):
+        font = QFont("Segoe UI", 10)
         font.setBold(True)
         font_metrics = QFontMetrics(font)
         text_bounding_rect = font_metrics.boundingRect(f"Button {self.id}")
         self.icon_label.setText(f"Button {self.id}")
-        widget_width = max(self._width, text_bounding_rect.width())
+        widget_width = max(self._width, text_bounding_rect.width())+10
         widget_height = self._height + text_bounding_rect.height()
 
-        self.button.setIconSize(QSize(self._width, self._height))
+        self.button.setIconSize(QSize(self._width+10, self._height))
         self.setFixedSize(widget_width, widget_height)
-        print("Test")
 
 
     def re_pos(self, off_x, off_y):
