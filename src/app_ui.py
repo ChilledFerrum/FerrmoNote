@@ -1,9 +1,8 @@
 import sys
 
-from PyQt6.QtCore import QSize
-from PyQt6.QtWidgets import QApplication, QLabel, QVBoxLayout, QHBoxLayout, QWidget, QGridLayout, QScrollArea
+from PyQt6.QtWidgets import QApplication, QVBoxLayout, QHBoxLayout, QWidget, QGridLayout, QScrollArea
 from src.ferrmo_buttons import FerrmoButton
-from src.ferrmo_notes import FerrmoNote
+
 from PyQt6.QtWidgets import QSizePolicy
 from src.main_board_ui import ScrollableTransparentBackground
 from src.ferrmo_widgets import AddButtonWidget

@@ -2,23 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3fdd768a-4c43-4f8f-9970-02668787d6df" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/FerrmoNote.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ferrmo_widgets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/FerrmoQt.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/app_ui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ferrmo_notes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ferrmo_notes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ferrmo_widgets.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ferrmo_widgets.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/style_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/style_util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />

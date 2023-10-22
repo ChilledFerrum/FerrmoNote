@@ -1,5 +1,5 @@
-from PyQt6.QtWidgets import QWidget
-from PyQt6.QtGui import QPainter, QColor, QLinearGradient
+from PyQt6.QtWidgets import QWidget, QLabel
+from PyQt6.QtGui import QPainter, QColor, QLinearGradient, QFont
 from PyQt6.QtCore import QPointF
 
 
@@ -42,3 +42,22 @@ class GradientBackground(QWidget):
     def resizeEvent(self, event):  # Main Event Function, is called, 1) When App is Resized. 2) When App is instantiated
         self.updateGradient(self.width, self.height, self.startColor, self.endColor)
         super().resizeEvent(event)
+
+
+class FerrmoLabel(QLabel):
+    def __init__(self, text="", font_family="Segoe UI", font_size=10, color="#000000", is_bold=False):
+        super().__init__()
+        font = QFont(font_family, font_size)
+        font.setBold(is_bold)
+        self.setFont(font)
+        self.setText(text)
+        self.setColor(color)
+
+
+    def setColor(self, color):
+        self.setStyleSheet(f"color:{color}")
+    # def stylize_Label(self):
+    #     style_sheet = """
+    #
+    #     """
+
