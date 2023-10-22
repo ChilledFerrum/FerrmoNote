@@ -1,7 +1,7 @@
 # FerrmoNote App
 
 
-## <span style="color: red;">In Progress...</span>
+## <span style="color: red;"> Work In Progress...</span>
 
 
 ### Installation...
