@@ -7,7 +7,7 @@ class GradientBackground(QWidget):
     def __init__(self, parent, width, height, layout, gradientStart, gradientEnd):
         super().__init__(parent)
 
-        self.setGeometry(15, 15, width, height)
+        self.setGeometry(0, 0, width, height)
         self.parent = parent
         self.width = width
         self.height = height
@@ -29,8 +29,8 @@ class GradientBackground(QWidget):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
-        start_point = QPointF(self.rect().left() - 100, self.rect().top())
-        end_point = QPointF(self.rect().left() - 100, self.rect().bottom())
+        start_point = QPointF(self.rect().left(), self.rect().top())
+        end_point = QPointF(self.rect().left(), self.rect().bottom())
         gradient = QLinearGradient(start_point, end_point)
         sr, sg, sb = self.startColor
         er, eg, eb = self.endColor

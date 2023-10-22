@@ -6,7 +6,7 @@ from src.ferrmo_buttons import FerrmoButton
 from src.ferrmo_notes import FerrmoNote
 from PyQt6.QtWidgets import QSizePolicy
 from src.main_board_ui import ScrollableTransparentBackground
-
+from src.ferrmo_widgets import AddButtonWidget
 menuColor = "#171924"
 
 
@@ -62,7 +62,6 @@ class Ferrmo(QWidget):
         self.mainLayout.setContentsMargins(0, 0, 0, 0)
         self.mainLayout.setSpacing(0)
 
-
         screen = QApplication.primaryScreen()
         screen_geometry = screen.availableGeometry()
         center_x = screen_geometry.width() // 2
@@ -76,17 +75,20 @@ class Ferrmo(QWidget):
     def createMainUI(self):
         # Side Bar Content
         self.frameSideBar = QWidget(self)
-        self.frameSideBar.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)  # Set size policy
+        self.frameSideBar.setSizePolicy(QSizePolicy.Policy.Expanding,
+                                        QSizePolicy.Policy.Expanding)  # Set size policy
 
         self.frameSideBar.setMinimumHeight(self.sideBar_minHeight)
         self.frameSideBar.setMaximumHeight(self.sideBar_minHeight)
         self.frameSideBar.setStyleSheet(f"background-color: {menuColor};")
 
-
         self.gridLayout = QGridLayout()
         # Main Frame Initializing
-        self.mainFrameUI = ScrollableTransparentBackground(self.width - 30, self.height - self.sideBar_minHeight - 30,
-                                                           self.gridLayout, self.gradient_start, self.gradient_end,
+        self.mainFrameUI = ScrollableTransparentBackground(self.width - 30,
+                                                           self.height - self.sideBar_minHeight - 30,
+                                                           self.gridLayout,
+                                                           self.gradient_start,
+                                                           self.gradient_end,
                                                            self)
         self.notesList = []
 
@@ -104,18 +106,24 @@ class Ferrmo(QWidget):
         pass
 
     def addNote(self, event):
-        new_Note = FerrmoNote(self)
-
-        new_Note.createNote(width=80, height=80)
-        if self.notesList:
-            new_Note.id = self.notesList[-1].id + 1
-        else:
-            new_Note.id = 0
-
-        new_Note.init_button_name()
-        self.notesList.append(new_Note)
-        self.update_notes()
         print("Clicked add Note!")
+        add_button_widget = AddButtonWidget(self, self.gradient_start, self.gradient_end)
+        add_button_widget.show()
+
+        # if add_button_widget.has_new_button():
+        #     new_Note = FerrmoNote(self)
+        #
+        #     new_Note.createNote(width=80, height=80)
+        #     if self.notesList:
+        #         new_Note.id = self.notesList[-1].id + 1
+        #     else:
+        #         new_Note.id = 0
+        #
+        #     new_Note.init_button_name()
+        #     self.notesList.append(new_Note)
+        #     self.update_notes()
+        # else:
+        #     print("Canceled New Note")
 
     def searchNote(self, event):
         print("Clicked Search Note!")
@@ -128,17 +136,17 @@ class Ferrmo(QWidget):
             if note.selected:
                 note.selected = False
                 print(f"Deleted Note {note.id}")
-                self.notesList.remove(note) # Remove from notes List
-                note.deleteLater() # Deletes Widget on event loop
+                self.notesList.remove(note)  # Remove from notes List
+                note.deleteLater()  # Deletes Widget on event loop
 
         self.update_notes()
+
     def settings(self, event):
         print("Clicked Settings!")
 
     def exit(self, event):
         print("Clicked Exit!")
         sys.exit(1)
-
 
     def update_notes(self):
         x = -80
@@ -173,9 +181,9 @@ class Ferrmo(QWidget):
 
     def init_menu_buttons(self):
         self.buttonViewNote = FerrmoButton(self.frameSideBar,
-                                            text="View Note",
-                                            font_size=10,
-                                            bg=menuColor, pressedColor="#036194")
+                                           text="View Note",
+                                           font_size=10,
+                                           bg=menuColor, pressedColor="#036194")
         self.buttonAddNote = FerrmoButton(self.frameSideBar,
                                           text="Add Notes",
                                           font_size=10,
