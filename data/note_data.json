@@ -1,1 +1,38 @@
-[]
+[
+    {
+        "datetime": "2023-10-23 14:35:03",
+        "Category": "Undefined",
+        "note_title": "Test",
+        "text_contents": "Test"
+    },
+    {
+        "datetime": "2023-10-23 14:35:14",
+        "Category": "Undefined",
+        "note_title": "Another_Note",
+        "text_contents": "More Text"
+    },
+    {
+        "datetime": "2023-10-23 14:51:45",
+        "Category": "Undefined",
+        "note_title": "Test_Note",
+        "text_contents": "Note Test"
+    },
+    {
+        "datetime": "2023-10-23 14:51:54",
+        "Category": "Undefined",
+        "note_title": "More_Notes",
+        "text_contents": "Test Note"
+    },
+    {
+        "datetime": "2023-10-23 14:55:26",
+        "Category": "Undefined",
+        "note_title": "Test_Note",
+        "text_contents": "Some Text Goes Here"
+    },
+    {
+        "datetime": "2023-10-23 14:55:43",
+        "Category": "Undefined",
+        "note_title": "Note_2",
+        "text_contents": "Some More Text\n\nGoes Here UwU"
+    }
+]

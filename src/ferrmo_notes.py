@@ -67,6 +67,9 @@ class FerrmoNote(QWidget):
                 existing_data = json.load(file)
         except FileNotFoundError:
             print(f"WARNING: Missing/Not Found File {self.file_name} at location {self.out_dir}")
+            with open(file_path, 'w') as file:
+                file.write("[]")
+                print(f"Created new note data file at path {file_path}")
             existing_data = []
         existing_data.append(contents)
 

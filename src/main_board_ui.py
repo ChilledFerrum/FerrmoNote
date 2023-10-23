@@ -11,8 +11,6 @@ class ScrollableTransparentBackground(QScrollArea):
 
         self.gradient_background = GradientBackground(self, width, height, layout, gradientStart, gradientEnd)
         # Set the grid layout as the layout of ScrollableTransparentBackground
-        self.setLayout(layout)
-
         self.gradient_background.setFixedSize(width, height)
         self.setWidget(self.gradient_background)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)

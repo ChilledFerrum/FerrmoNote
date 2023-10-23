@@ -13,8 +13,8 @@ class GradientBackground(QWidget):
         self.height = height
         self.startColor = gradientStart
         self.endColor = gradientEnd
-
-        self.setLayout(layout)
+        #
+        # self.setLayout(layout)
 
     def updateGradient(self, width, height, gradientStart, gradientEnd): # is called, 1) When App is Resized. 2) When App is instantiated
         # Updates the fields of the GradientBackground class and initiates a repaint event

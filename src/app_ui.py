@@ -43,6 +43,8 @@ class Ferrmo(QWidget):
         self.sideBar_minHeight = 50
         self.frameSideBar = None
         self.notesList = []
+        self.mainFrame_width = self.width - 30
+        self.mainFrame_height = self.height - self.sideBar_minHeight - 30
 
         self.buttonViewNote = None
         self.buttonAddNote = None
@@ -109,20 +111,7 @@ class Ferrmo(QWidget):
         add_button_widget = AddButtonWidget(self, self.gradient_start, self.gradient_end)
         add_button_widget.show()
 
-        # if add_button_widget.has_new_button():
-        #     new_Note = FerrmoNote(self)
-        #
-        #     new_Note.createNote(width=80, height=80)
-        #     if self.notesList:
-        #         new_Note.id = self.notesList[-1].id + 1
-        #     else:
-        #         new_Note.id = 0
-        #
-        #     new_Note.init_button_name()
-        #     self.notesList.append(new_Note)
-        #     self.update_notes()
-        # else:
-        #     print("Canceled New Note")
+
 
     def searchNote(self, event):
         print("Clicked Search Note!")
