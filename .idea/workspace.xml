@@ -5,7 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3fdd768a-4c43-4f8f-9970-02668787d6df" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/temp.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/~$temp.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/FerrmoNote.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/FerrmoNote.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ferrmo.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ferrmo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/note_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/note_data.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/app_ui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ferrmo_notes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ferrmo_notes.py" afterDir="false" />
@@ -41,8 +47,8 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true"
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RunManager">
@@ -53,9 +59,9 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="D:\Conda\envs\FerrmoQt\python.exe" />
+      <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Ferrmo.py" />

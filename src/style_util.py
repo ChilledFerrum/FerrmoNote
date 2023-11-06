@@ -4,28 +4,24 @@ from PyQt6.QtCore import QPointF
 
 
 class GradientBackground(QWidget):
-    def __init__(self, parent, width, height, layout, gradientStart, gradientEnd):
-        super().__init__(parent)
-
-        self.setGeometry(0, 0, width, height)
-        self.parent = parent
-        self.width = width
-        self.height = height
+    def __init__(self, width, height, gradientStart, gradientEnd):
+        super().__init__()
         self.startColor = gradientStart
         self.endColor = gradientEnd
-        #
-        # self.setLayout(layout)
+        self.width = width
+        self.height = height
 
-    def updateGradient(self, width, height, gradientStart, gradientEnd): # is called, 1) When App is Resized. 2) When App is instantiated
+    def updateGradient(self, width, height, gradientStart,
+                       gradientEnd):  # is called, 1) When App is Resized. 2) When App is instantiated
         # Updates the fields of the GradientBackground class and initiates a repaint event
         self.width = width
         self.height = height
         self.startColor = gradientStart
         self.endColor = gradientEnd
-
+        self.setContentsMargins(0, 0, 0, 0)
         self.repaint()
 
-    def paintEvent(self, event): # Main Paint or Repaint event of the background
+    def paintEvent(self, event):  # Main Paint or Repaint event of the background
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
@@ -53,11 +49,9 @@ class FerrmoLabel(QLabel):
         self.setText(text)
         self.setColor(color)
 
-
     def setColor(self, color):
         self.setStyleSheet(f"color:{color}")
     # def stylize_Label(self):
     #     style_sheet = """
     #
     #     """
-

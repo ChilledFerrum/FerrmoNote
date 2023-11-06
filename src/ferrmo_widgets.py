@@ -14,6 +14,7 @@ class AddButtonWidget(QWidget):
         self._parent = parent  # Used to create communication between parent and child widget
         self.new_button = False  # Used to communicate with parent class if a new button was submitted.
 
+        self.layout = QVBoxLayout()
         self.note_name = QLineEdit()
         self.text_area = QPlainTextEdit()
 
@@ -22,11 +23,6 @@ class AddButtonWidget(QWidget):
 
         self.window_width = parent.mainFrame_width
         self.window_height = parent.mainFrame_height
-        self.layout = QVBoxLayout()
-
-        # self.gradient_background = GradientBackground(self, self.window_width, self.window_height,
-        #                                               self.layout,
-        #                                                 self.startColor, self.endColor)
 
         self.initUI()
 
@@ -48,7 +44,7 @@ class AddButtonWidget(QWidget):
         self.text_area.setStyleSheet(text_area_style_sheet)
         self.note_name.setStyleSheet(text_area_style_sheet)
         self.setGeometry(0, 0, self.window_width, self.window_height)
-        # self.layout.addWidget(self.gradient_background)
+
         self.setup_addNote_window()
 
     def setup_addNote_window(self):
@@ -76,6 +72,7 @@ class AddButtonWidget(QWidget):
         self.setLayout(self.layout)
 
     def cancel_button_func(self):
+
         self.close()
 
     def submit_button_func(self):
@@ -113,8 +110,3 @@ class AddButtonWidget(QWidget):
 
     def has_new_button(self):
         return self.new_button
-
-    # def resizeEvent(self, event):
-    #
-    #     self.gradient_background.setFixedSize(self.width(), self.height())
-    #     self.gradient_background.updateGradient(self.width(), self.height(), self.startColor, self.endColor)

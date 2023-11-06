@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QToolButton, QLabel, QVBoxLayout, QWidget, QSizePolicy
 from PyQt6.QtGui import QIcon, QFont, QFontMetrics
+from src.ferrmo_buttons import FerrmoButton
 from PyQt6.QtCore import QSize, Qt
 import json
 
@@ -25,27 +26,30 @@ class FerrmoNote(QWidget):
         self.button.clicked.connect(self.button_select)
         self._parent = parent
 
-        self._width = None
-        self._height = None
+        self.icon_width = None
+        self.icon_height = None
         self.button.setCheckable(True)
 
     def createNote(self, width, height):
 
         icon = QIcon("style/note_leave.png")
+        self.button.setIcon(icon)
+        self.button.setIconSize(QSize(76, 92))
         size = icon.pixmap(icon.availableSizes()[0])
 
-        _width = size.width()
-        _height = size.height()
-        self._width = _width
-        self._height = _height
+        self.icon_width = size.width()//2
+        self.icon_height = size.height()//2
+
         self.button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
-        self.icon_label.setPixmap(self.button.icon().pixmap(QSize(_width, _height)))
+        self.button.setStyleSheet("text-align: center;")
+        self.icon_label.setWordWrap(True)
         self.icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.button.setIconSize(QSize(_width, _height))
-        self.setFixedSize(_width, _height)
+        self.icon_label.setStyleSheet("border:1px solid black;")
+        self.button.setIconSize(QSize(self.icon_width, self.icon_height))
+
         self.setStyleSheet(
             "background-color: rgba(255, 255, 255, 0);"
-            # "border: 1px solid black;"
+            "border: 1px solid black;"
             "margin-left: 2px;"
         )
 
@@ -59,6 +63,12 @@ class FerrmoNote(QWidget):
         self.button_layout.addWidget(self.icon_label)
         self.setLayout(self.button_layout)
         self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+
+    def init_button_name(self):
+        self.icon_label.setText(self.note_name)
+        self.icon_label.setWordWrap(True)
+        self.icon_label.adjustSize()
+        self.button.setIconSize(QSize(self.icon_width, self.icon_height))
 
     def set_contents(self, contents):
         file_path = self.out_dir+self.file_name
@@ -77,7 +87,7 @@ class FerrmoNote(QWidget):
             json.dump(existing_data, file, indent=4)
 
     def button_select(self):
-        self._parent.unselect_selected_button()  # Removes current selected button
+        self.button_unselect()  # Removes current selected button
         self.selected = True
         print(f"Button Selected {self.id}")
 
@@ -85,29 +95,21 @@ class FerrmoNote(QWidget):
         font.setBold(True)
         self.icon_label.setFont(font)
         self.icon_label.setStyleSheet("color: rgb(0,255,0);")
-        self.button.setIconSize(QSize(self._width + 15, self._height + 15))
+        self.button.setIconSize(QSize(self.icon_width + 15, self.icon_height + 15))
+        self.button.setFixedSize(self.icon_width+15, self.icon_height+15)
         self.button.setIcon(QIcon("style/note_selected.png"))
+
+    # def unselect_selected_button(self):
 
     def button_unselect(self):
         self.selected = False
         font = QFont("Segoe UI", 9)
         font.setBold(True)
         self.icon_label.setFont(font)
+        self.button.setIconSize(QSize(self.icon_width, self.icon_height))
         self.icon_label.setStyleSheet("color: rgb(0,0,0);")
-
         self.button.setIcon(QIcon("style/note_leave.png"))
 
-    def init_button_name(self):
-        font = QFont("Segoe UI", 10)
-        font.setBold(True)
-        font_metrics = QFontMetrics(font)
-        text_bounding_rect = font_metrics.boundingRect(f"Button {self.id}")
-        self.icon_label.setText(self.note_name)
-        widget_width = max(self._width, text_bounding_rect.width()) + 10
-        widget_height = self._height + text_bounding_rect.height()
-
-        self.button.setIconSize(QSize(self._width + 10, self._height))
-        self.setFixedSize(widget_width, widget_height)
 
     def re_pos(self, off_x, off_y):
         self.move(50 + off_x, 50 + off_y)
