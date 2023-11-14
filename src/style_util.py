@@ -1,6 +1,8 @@
-from PyQt6.QtWidgets import QWidget, QLabel
-from PyQt6.QtGui import QPainter, QColor, QLinearGradient, QFont
-from PyQt6.QtCore import QPointF
+from PyQt6.QtWidgets import (QWidget, QLabel, QVBoxLayout, QGridLayout,
+                             QPushButton)
+from PyQt6.QtGui import (QPainter, QColor, QLinearGradient,
+                         QFont, QIcon)
+from PyQt6.QtCore import QPointF, QTimer, Qt, QSize
 
 
 class GradientBackground(QWidget):
@@ -38,6 +40,46 @@ class GradientBackground(QWidget):
     def resizeEvent(self, event):  # Main Event Function, is called, 1) When App is Resized. 2) When App is instantiated
         self.updateGradient(self.width, self.height, self.startColor, self.endColor)
         super().resizeEvent(event)
+
+
+class Message(QWidget):
+    def __init__(self, title, message, parent=None):
+        QWidget.__init__(self, parent)
+        self.setLayout(QGridLayout())
+        self.titleLabel = QLabel(title, self)
+        self.titleLabel.setStyleSheet("font-size: 18px; font-weight: bold; padding: 0;")
+        self.messageLabel = QLabel(message, self)
+        self.messageLabel.setStyleSheet("font-size: 12px; font-weight: normal; padding: 0;")
+        self.buttonClose = QPushButton(self)
+        self.buttonClose.setIcon(QIcon.fromTheme("window-close"))
+        self.buttonClose.setFlat(True)
+        self.buttonClose.setFixedSize(32, 32)
+        self.buttonClose.setIconSize(QSize(16, 16))
+        self.layout().addWidget(self.titleLabel)
+        self.layout().addWidget(self.messageLabel, 2, 0)
+        self.layout().addWidget(self.buttonClose, 0, 1)
+
+
+class Notification(QWidget):
+    def __init__(self, parent=None):
+        super(QWidget, self).__init__(parent=None)
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
+        self.mainLayout = QVBoxLayout(self)
+
+    def setNotify(self, title, description, color, timeout):
+        self.m = Message(title, description)
+        self.mainLayout.addWidget(self.m)
+        self.setStyleSheet(f"background: rgb({color}); padding: 0;")
+        self.m.buttonClose.clicked.connect(self.onClicked)
+        self.show()
+        QTimer.singleShot(timeout, self.closeMe)
+
+    def closeMe(self):
+        self.close()
+        self.m.close()
+
+    def onClicked(self):
+        self.close()
 
 
 class FerrmoLabel(QLabel):

@@ -1,5 +1,6 @@
-from src.style_util import GradientBackground, FerrmoLabel
-from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QPlainTextEdit, QLineEdit, QLabel
+from src.style_util import FerrmoLabel
+from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QWidget, QPlainTextEdit,
+                             QLineEdit)
 from src.ferrmo_buttons import FerrmoButton
 from src.ferrmo_notes import FerrmoNote
 from datetime import datetime
@@ -21,8 +22,8 @@ class AddButtonWidget(QWidget):
         self.startColor = gradient_start
         self.endColor = gradient_end
 
-        self.window_width = parent.mainFrame_width
-        self.window_height = parent.mainFrame_height
+        self.window_width = parent.width
+        self.window_height = parent.height
 
         self.initUI()
 
@@ -91,8 +92,8 @@ class AddButtonWidget(QWidget):
 
         new_Note.init_button_name()
         self._parent.notesList.append(new_Note)
-        self._parent.update_notes()  # Visualizes in parent frame MainFrameUI
-
+        self._parent.update_notes(clear_data=False)  # Visualizes in parent frame MainFrameUI
+        self._parent.showNotification(f"New Button Created", self.note_name.text())
         self.close()
 
     def prepare_contents(self):

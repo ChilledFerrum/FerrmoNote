@@ -1,12 +1,14 @@
 import sys
 
-from PyQt6.QtWidgets import QApplication, QVBoxLayout, QHBoxLayout, QWidget, QGridLayout
+from PyQt6.QtWidgets import (QApplication, QVBoxLayout, QHBoxLayout,
+                             QWidget, QGridLayout)
+from PyQt6.QtCore import QRect
 from src.ferrmo_buttons import FerrmoButton
-
-import pandas as pd
-from PyQt6.QtWidgets import QSizePolicy
-from src.main_board_ui import MainFrameUI
+# Notifications Credit to Axel Schneider
+from src.style_util import Notification
 from src.ferrmo_widgets import AddButtonWidget
+import pandas as pd
+from src.main_board_ui import MainFrameUI
 from src.ferrmo_notes import FerrmoNote
 
 menuColor = "#171924"
@@ -15,10 +17,13 @@ menuColor = "#171924"
 class Ferrmo(QWidget):
     def __init__(self, size):
         super().__init__()
+
         self.mainFrame = None  # Entire App Frame
 
-        self.mainFrameUI = None  # Main Frame UI Contains Note History
+        self.saved_state = None
 
+        self.mainFrameUI = None  # Main Frame UI Contains Note History
+        self.notification = None  # Pop-up Notifications
         self.gridLayout = None  # Grid Layout to hold Note History
         self.setWindowTitle("Ferrmo")
         self.width = size[0]
@@ -86,20 +91,20 @@ class Ferrmo(QWidget):
         self.mainLayout.addWidget(self.mainFrameUI)
         self.mainLayout.addWidget(self.frameSideBar)
 
+    def showNotification(self, title, description, color=(36, 94, 189)):
+        self.notification = Notification()
+        self.notification.setNotify(title, description, color, 3000)
+        r = QRect(self.x() + round(self.width / 2) - round(self.notification.width() / 2),
+                  self.y() + 26, self.notification.m.messageLabel.width() + 30,
+                  self.notification.m.messageLabel.height())
+        self.notification.setGeometry(r)
+
     def viewNote(self):
         pass
 
     def addNote(self, event):
-        print("Clicked add Note!")
-        new_Note = FerrmoNote(self.mainFrameUI)
-        new_Note.createNote(width=80, height=80)
-        if self.notesList:
-            new_Note.id = self.notesList[-1].id + 1
-        else:
-            new_Note.id = 0
-        new_Note.init_button_name()
-        self.notesList.append(new_Note)
-        self.update_notes(clear_data=False)  # Add New Note without clearing current widget data
+        add_button_widget = AddButtonWidget(self, self.gradient_start, self.gradient_end)
+        self.mainLayout.insertWidget(1, add_button_widget)
 
     def searchNote(self, event):
         print("Clicked Search Note!")
@@ -118,22 +123,27 @@ class Ferrmo(QWidget):
         self.update_notes()
 
     def loadNotes(self, event):
-        print("Clicked Load Notes")
+
         notes_data = pd.read_json('data/note_data.json')
-        if self.notesList:
-            self.notesList = []
-        for index, row in notes_data.iterrows():
-            new_Note = FerrmoNote(self.mainFrameUI)
-            new_Note.note_name = row['note_title']
-            new_Note.contents = row['text_contents']
-            new_Note.createNote(width=80, height=80)
+        print(len(notes_data))
+        if len(notes_data)> 0:
             if self.notesList:
-                new_Note.id = self.notesList[-1].id + 1
-            else:
-                new_Note.id = 0
-            new_Note.init_button_name()
-            self.notesList.append(new_Note)
-        self.update_notes()
+                self.notesList = []
+            for index, row in notes_data.iterrows():
+                new_Note = FerrmoNote(self.mainFrameUI)
+                new_Note.note_name = row['note_title']
+                new_Note.contents = row['text_contents']
+                new_Note.createNote(width=80, height=80)
+                if self.notesList:
+                    new_Note.id = self.notesList[-1].id + 1
+                else:
+                    new_Note.id = 0
+                new_Note.init_button_name()
+                self.notesList.append(new_Note)
+            self.update_notes()
+            self.showNotification("Loaded Notes", f"Loaded {len(self.notesList)} notes")
+        else:
+            self.showNotification("Warning", "<b>No notes to load<b><br/>\n note_data.json Empty")
 
     def settings(self, event):
         print("Clicked Settings!")
@@ -237,4 +247,5 @@ class Ferrmo(QWidget):
     """
 
     def resizeEvent(self, event):
-        self.mainFrameUI.gradient_background.updateGradient(self.width, self.height, self.gradient_start, self.gradient_end)
+        self.mainFrameUI.gradient_background.updateGradient(self.width, self.height, self.gradient_start,
+                                                            self.gradient_end)

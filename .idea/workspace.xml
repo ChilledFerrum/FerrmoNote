@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3fdd768a-4c43-4f8f-9970-02668787d6df" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/temp.docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/~$temp.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/FerrmoNote.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/FerrmoNote.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Ferrmo.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ferrmo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/note_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/note_data.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/app_ui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ferrmo_notes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ferrmo_notes.py" afterDir="false" />
@@ -45,12 +39,12 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Ferrmo" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="FerrmoNote" />
