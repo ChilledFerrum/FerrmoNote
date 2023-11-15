@@ -32,6 +32,12 @@ class MainFrameUI(QWidget):
         scroll.setWidgetResizable(True)
         self.mainFrameUI_layout.addWidget(scroll)
 
+    def unselect_note(self):
+        for note in self._parent.notesList:
+            if note.selected:
+                note.button_unselect_UI()
+                break
+
     def display_notes(self, notesList, clear_data=True):
         try:
             if clear_data:
@@ -45,7 +51,7 @@ class MainFrameUI(QWidget):
             self.notes_grid_layout.addWidget(note, note.grid_pos[0], note.grid_pos[1])
         scroll.setWidget(self.mainFrameUI_content_widget)
         scroll.setWidgetResizable(True)
-        scroll.verticalScrollBar().setValue(self.scroll_area_locations+self.delta)
+        scroll.verticalScrollBar().setValue(self.scroll_area_locations + self.delta)
         self.mainFrameUI_layout.addWidget(scroll)
 
     def clear_mainFrameUI_layout(self):
@@ -63,9 +69,3 @@ class MainFrameUI(QWidget):
         current_scroll_pos = scroll.verticalScrollBar().value()
         self.scroll_area_locations = current_scroll_pos
         self.delta = event.angleDelta().y()
-
-    def unselect_note(self):
-        for note in self._parent.notesList:
-            if note.selected:
-                note.button_unselect_UI()
-                return

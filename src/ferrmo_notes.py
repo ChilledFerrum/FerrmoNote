@@ -24,7 +24,6 @@ class FerrmoNote(QWidget):
         self.icon_label = QLabel()
         self.number = 0
         self.grid_pos = (0, 0)
-        self.button.clicked.connect(self.note_button)
         self.icon_width = None
         self.icon_height = None
         self.button.setCheckable(True)
@@ -41,7 +40,6 @@ class FerrmoNote(QWidget):
 
         self.button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
         self.button.setStyleSheet("text-align: center;")
-        # self.icon_label.setWordWrap(True)
         self.icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.icon_label.setStyleSheet("border:0px solid black;")
         self.button.setIconSize(QSize(self.icon_width, self.icon_height))
@@ -71,6 +69,7 @@ class FerrmoNote(QWidget):
         self.icon_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.button.setIconSize(QSize(self.icon_width, self.icon_height))
         self.button.setToolTip(self.note_name)
+        self.button.clicked.connect(self.note_button)
 
     def set_contents(self, contents):
         file_path = self.out_dir + self.file_name

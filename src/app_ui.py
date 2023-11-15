@@ -21,7 +21,7 @@ class Ferrmo(QWidget):
         self.mainFrame = None  # Entire App Frame
 
         self.saved_state = None
-
+        print("Active")
         self.mainFrameUI = None  # Main Frame UI Contains Note History
         self.notification = None  # Pop-up Notifications
         self.gridLayout = None  # Grid Layout to hold Note History
@@ -76,6 +76,7 @@ class Ferrmo(QWidget):
         self.setup_frameSideBar()
 
         self.gridLayout = QGridLayout()
+
         # Main Frame Initializing
         self.mainFrameUI = MainFrameUI(self, self.width,
                                        self.height,
@@ -119,14 +120,12 @@ class Ferrmo(QWidget):
                 print(f"Deleted Note {note.id}")
                 self.notesList.remove(note)
                 note.deleteLater()
-
-        self.update_notes()
+        self.update_notes(clear_data=False)
 
     def loadNotes(self, event):
-
         notes_data = pd.read_json('data/note_data.json')
-        print(len(notes_data))
-        if len(notes_data)> 0:
+
+        if len(notes_data) > 0:
             if self.notesList:
                 self.notesList = []
             for index, row in notes_data.iterrows():
@@ -134,11 +133,12 @@ class Ferrmo(QWidget):
                 new_Note.note_name = row['note_title']
                 new_Note.contents = row['text_contents']
                 new_Note.createNote(width=80, height=80)
+                new_Note.init_button_name()
                 if self.notesList:
                     new_Note.id = self.notesList[-1].id + 1
                 else:
                     new_Note.id = 0
-                new_Note.init_button_name()
+
                 self.notesList.append(new_Note)
             self.update_notes()
             self.showNotification("Loaded Notes", f"Loaded {len(self.notesList)} notes")

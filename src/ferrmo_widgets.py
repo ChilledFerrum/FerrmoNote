@@ -73,12 +73,12 @@ class AddButtonWidget(QWidget):
         self.setLayout(self.layout)
 
     def cancel_button_func(self):
-
         self.close()
+        del self
 
     def submit_button_func(self):
         self.new_button = True
-        new_Note = FerrmoNote(self._parent)
+        new_Note = FerrmoNote(self._parent.mainFrameUI)  # Fixed incorrect parent reference
         new_Note.note_name = self.note_name.text()
         new_Note.contents = self.text_area.toPlainText()
         print(f"New Note Created [{self.note_name.text()}]\n{new_Note.contents}")
@@ -98,7 +98,6 @@ class AddButtonWidget(QWidget):
 
     def prepare_contents(self):
         note_title = self.note_name.text()
-        note_title = note_title.replace(" ", "_")
         contents = {"datetime": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "Category": "Undefined",
                     "note_title": note_title,
