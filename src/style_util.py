@@ -47,17 +47,20 @@ class Message(QWidget):
         QWidget.__init__(self, parent)
         self.setLayout(QGridLayout())
         self.titleLabel = QLabel(title, self)
-        self.titleLabel.setStyleSheet("font-size: 18px; font-weight: bold; padding: 0;")
+        self.titleLabel.setStyleSheet("font-size: 18px; font-weight: bold; padding: 0; text-align:center;")
         self.messageLabel = QLabel(message, self)
-        self.messageLabel.setStyleSheet("font-size: 12px; font-weight: normal; padding: 0;")
+        self.messageLabel.setStyleSheet("font-size: 12px; font-weight: normal; padding: 0; text-align: center;")
+
+        # Button
         self.buttonClose = QPushButton(self)
-        self.buttonClose.setIcon(QIcon.fromTheme("window-close"))
+        self.buttonClose.setIcon(QIcon("style/close_icon.png"))
         self.buttonClose.setFlat(True)
         self.buttonClose.setFixedSize(32, 32)
         self.buttonClose.setIconSize(QSize(16, 16))
+
         self.layout().addWidget(self.titleLabel)
-        self.layout().addWidget(self.messageLabel, 2, 0)
-        self.layout().addWidget(self.buttonClose, 0, 1)
+        self.layout().addWidget(self.messageLabel, 2, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.layout().addWidget(self.buttonClose, 0, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
 
 
 class Notification(QWidget):
@@ -68,8 +71,9 @@ class Notification(QWidget):
 
     def setNotify(self, title, description, color, timeout):
         self.m = Message(title, description)
-        self.mainLayout.addWidget(self.m)
-        self.setStyleSheet(f"background: rgb({color}); padding: 0;")
+        self.mainLayout.addWidget(self.m, alignment=Qt.AlignmentFlag.AlignHCenter)
+        r, g, b = color
+        self.setStyleSheet(f"background: rgb({r}, {g}, {b}); padding: 0;")
         self.m.buttonClose.clicked.connect(self.onClicked)
         self.show()
         QTimer.singleShot(timeout, self.closeMe)

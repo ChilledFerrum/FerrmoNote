@@ -1,3 +1,16 @@
 [
-
+    {
+        "datetime": "2023-11-16 10:56:45",
+        "_id": 0,
+        "Category": "Undefined",
+        "note_title": "Notifications Upgrade",
+        "text_contents": "Modified Notifications to include a close icon from Google Fonts"
+    },
+    {
+        "datetime": "2023-11-16 10:57:21",
+        "_id": 1,
+        "Category": "Undefined",
+        "note_title": "Alignment Fixes",
+        "text_contents": "Fixed the Alignments of several widgets, in order to look more appropriate, user friendly and attractive."
+    }
 ]

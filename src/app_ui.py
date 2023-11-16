@@ -92,9 +92,9 @@ class Ferrmo(QWidget):
         self.mainLayout.addWidget(self.mainFrameUI)
         self.mainLayout.addWidget(self.frameSideBar)
 
-    def showNotification(self, title, description, color=(36, 94, 189)):
+    def showNotification(self, title, description, color=(36, 94, 189), timeout=3000):
         self.notification = Notification()
-        self.notification.setNotify(title, description, color, 3000)
+        self.notification.setNotify(title, description, color, timeout)
         r = QRect(self.x() + round(self.width / 2) - round(self.notification.width() / 2),
                   self.y() + 26, self.notification.m.messageLabel.width() + 30,
                   self.notification.m.messageLabel.height())
@@ -116,11 +116,14 @@ class Ferrmo(QWidget):
     def deleteNote(self, event):  # Deletes Note
         for note in self.notesList:
             if note.selected:
-                note.selected = False
                 print(f"Deleted Note {note.id}")
+                note.selected = False
+                note.delete_note_data()
                 self.notesList.remove(note)
                 note.deleteLater()
-        self.update_notes(clear_data=False)
+                self.update_notes(clear_data=False)
+                return
+        self.showNotification("Warning!", "<b>No Note Selected</b>", color=(255, 140, 0))
 
     def loadNotes(self, event):
         notes_data = pd.read_json('data/note_data.json')
@@ -129,21 +132,15 @@ class Ferrmo(QWidget):
             if self.notesList:
                 self.notesList = []
             for index, row in notes_data.iterrows():
-                new_Note = FerrmoNote(self.mainFrameUI)
-                new_Note.note_name = row['note_title']
-                new_Note.contents = row['text_contents']
-                new_Note.createNote(width=80, height=80)
-                new_Note.init_button_name()
-                if self.notesList:
-                    new_Note.id = self.notesList[-1].id + 1
-                else:
-                    new_Note.id = 0
-
-                self.notesList.append(new_Note)
+                new_Note = FerrmoNote(self.mainFrameUI)  # Init Note
+                note_info = [row['datetime'], row['_id'], row['Category'], row['note_title'], row['text_contents']]
+                new_Note.set_contents(note_info)  # Store Note Info
+                new_Note.createNote()  # Create Note
+                self.notesList.append(new_Note)  # Append to active note list
             self.update_notes()
             self.showNotification("Loaded Notes", f"Loaded {len(self.notesList)} notes")
         else:
-            self.showNotification("Warning", "<b>No notes to load<b><br/>\n note_data.json Empty")
+            self.showNotification("Warning!", "<b>No notes to load<b><br/>\n note_data.json Empty", color=(255, 140, 0))
 
     def settings(self, event):
         print("Clicked Settings!")

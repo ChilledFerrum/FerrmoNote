@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QWidget, QPlainTextEdit,
 from src.ferrmo_buttons import FerrmoButton
 from src.ferrmo_notes import FerrmoNote
 from datetime import datetime
+import json
 
 
 class AddButtonWidget(QWidget):
@@ -14,6 +15,9 @@ class AddButtonWidget(QWidget):
 
         self._parent = parent  # Used to create communication between parent and child widget
         self.new_button = False  # Used to communicate with parent class if a new button was submitted.
+
+        self.out_dir = "data/"
+        self.file_name = "note_data.json"
 
         self.layout = QVBoxLayout()
         self.note_name = QLineEdit()
@@ -83,8 +87,8 @@ class AddButtonWidget(QWidget):
         new_Note.contents = self.text_area.toPlainText()
         print(f"New Note Created [{self.note_name.text()}]\n{new_Note.contents}")
 
-        new_Note.set_contents(self.prepare_contents())
-        new_Note.createNote(width=80, height=80)
+        new_Note.save_contents(self.prepare_contents())
+        new_Note.createNote()
         if self._parent.notesList:
             new_Note.id = self._parent.notesList[-1].id + 1
         else:
@@ -96,9 +100,18 @@ class AddButtonWidget(QWidget):
         self._parent.showNotification(f"New Button Created", self.note_name.text())
         self.close()
 
+    def get_last_note_id(self):
+        with open(self.out_dir + self.file_name, "r") as f:
+            data = json.load(f)
+            try:
+                return data[-1].get('_id', 0) + 1
+            except IndexError:
+                return 0
+
     def prepare_contents(self):
         note_title = self.note_name.text()
         contents = {"datetime": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "_id": self.get_last_note_id(),
                     "Category": "Undefined",
                     "note_title": note_title,
                     "text_contents": self.text_area.toPlainText()}

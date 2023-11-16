@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import (QToolButton, QLabel, QVBoxLayout, QWidget,
-                             QSizePolicy)
+                             QSizePolicy, QToolTip)
 from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import QSize, Qt, QRect
 import json
@@ -13,65 +13,69 @@ class FerrmoNote(QWidget):
         self.file_name = "note_data.json"
 
         # Note Info
+        self.datetime = ""
         self.id = 0
+        self.category = ""
+        self.note_name = ""
+        self.text_contents = ""
+
         self.note = None
         self.selected = False
 
-        self.note_name = ""
-
         self.button_layout = QVBoxLayout(self)
-        self.button = QToolButton(self)
-        self.icon_label = QLabel()
+        self.note_button_widget = QToolButton(self)
+        self.note_label_widget = QLabel()
         self.number = 0
         self.grid_pos = (0, 0)
         self.icon_width = None
         self.icon_height = None
-        self.button.setCheckable(True)
+        self.note_button_widget.setCheckable(True)
 
-    def createNote(self, width, height):
+    def createNote(self, width=80, height=80):
 
         icon = QIcon("style/note_leave.png")
-        self.button.setIcon(icon)
-        self.button.setIconSize(QSize(76, 92))
+        self.note_button_widget.setIcon(icon)
+        # self.note_button_widget.setIconSize(QSize(76, 92))
         size = icon.pixmap(icon.availableSizes()[0])
-
-        self.icon_width = size.width() // 2
+        self.icon_width = size.width() // 2+2
         self.icon_height = size.height() // 2
+        self.note_button_widget.setFixedSize(self.icon_width, self.icon_height)
 
-        self.button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
-        self.button.setStyleSheet("text-align: center;")
-        self.icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.icon_label.setStyleSheet("border:0px solid black;")
-        self.button.setIconSize(QSize(self.icon_width, self.icon_height))
+        self.note_button_widget.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        self.note_button_widget.setStyleSheet("text-align: center; border: 0px solid black;")
 
-        self.setStyleSheet(
-            "background-color: rgba(255, 255, 255, 0);"
-            "border: 0px solid black;"
-            "margin-left: 5px;"
-        )
+        self.note_label_widget.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        self.note_button_widget.setGeometry(-15, -15, self.icon_width, self.icon_height)
+        self.note_button_widget.setIconSize(QSize(self.icon_width, self.icon_height))
 
         font = QFont("Segoe UI", 9)
         font.setBold(True)
-        self.icon_label.setFont(font)
-        self.button.setIcon(QIcon("style/note_leave.png"))
+        self.note_label_widget.setFont(font)
+        self.note_button_widget.setIcon(QIcon("style/note_leave.png"))
 
-        self.button_layout.addWidget(self.button)
-        self.button_layout.addWidget(self.icon_label)
+        self.button_layout.addWidget(self.note_label_widget, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.button_layout.addWidget(self.note_button_widget, alignment=Qt.AlignmentFlag.AlignHCenter)
+
         self.setLayout(self.button_layout)
         self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        self.button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon, )
+        self.note_button_widget.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon, )
+        self.init_button_name()
+
+    def set_contents(self, info):
+        self.datetime, self.id, self.category, \
+            self.note_name, self.text_contents = info
 
     def init_button_name(self):
-        self.icon_label.setText(self.note_name)
-        self.icon_label.setWordWrap(True)
-        self.icon_label.setMaximumWidth(self.icon_width+50)
+        self.note_label_widget.setText(self.note_name)
+        self.note_label_widget.setWordWrap(True)
+        self.note_label_widget.setMaximumWidth(self.icon_width + 50)
         self.setMinimumSize(self.sizeHint())
-        self.icon_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.button.setIconSize(QSize(self.icon_width, self.icon_height))
-        self.button.setToolTip(self.note_name)
-        self.button.clicked.connect(self.note_button)
+        self.note_label_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.note_button_widget.setIconSize(QSize(self.icon_width, self.icon_height))
+        self.note_button_widget.setToolTip(self.note_name)
+        self.note_button_widget.clicked.connect(self.note_button)
 
-    def set_contents(self, contents):
+    def save_contents(self, contents):
         file_path = self.out_dir + self.file_name
         try:
             with open(file_path, 'r') as file:
@@ -91,26 +95,38 @@ class FerrmoNote(QWidget):
         self._parent.unselect_note()  # Uses higher level widget reference to communicate with lower level widget.
         self.button_select_UI()
 
+    def delete_note_data(self):
+        file_path = self.out_dir + self.file_name
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+            data[:] = [row for row in data if int(row.get('_id')) != self.id]
+        with open(file_path, 'w') as f:
+            json.dump(data, f, indent=4)
+
+    def setButtonFixedSize(self, width, height):
+        self.icon_width = width
+        self.icon_height = height
+        self.note_button_widget.setIconSize(QSize(width, height))  # Adjusted for styling
+        self.note_button_widget.setFixedSize(width, height)
+
     def button_select_UI(self):
         self.selected = True
         print(f"Button Selected {self.id}")
 
         font = QFont("Segoe UI", 10)
         font.setBold(True)
-        self.icon_label.setFont(font)
-        self.icon_label.setStyleSheet("color: rgb(0,255,0);")
-        self.button.setIconSize(QSize(self.icon_width + 15, self.icon_height + 15))
-        self.button.setGeometry(QRect(0, 0, self.icon_width + 15, self.icon_height + 15))
-        self.button.setIcon(QIcon("style/note_selected.png"))
+        self.note_label_widget.setFont(font)
+        self.setButtonFixedSize(self.icon_width+15, self.icon_height+15)
+        self.note_button_widget.setIcon(QIcon("style/note_selected.png"))
 
     def button_unselect_UI(self):
         self.selected = False
         font = QFont("Segoe UI", 9)
         font.setBold(True)
-        self.icon_label.setFont(font)
-        self.button.setIconSize(QSize(self.icon_width, self.icon_height))
-        self.icon_label.setStyleSheet("color: rgb(255,255,255);")
-        self.button.setIcon(QIcon("style/note_leave.png"))
+        self.note_label_widget.setFont(font)
+        self.setButtonFixedSize(self.icon_width-15, self.icon_height-15)
+        self.note_label_widget.setStyleSheet("color: rgb(255,255,255);")
+        self.note_button_widget.setIcon(QIcon("style/note_leave.png"))
 
     def re_pos(self, off_x, off_y):
         self.move(50 + off_x, 50 + off_y)
@@ -119,13 +135,13 @@ class FerrmoNote(QWidget):
         super().resizeEvent(event)
 
     def enterEvent(self, event):
-        # QToolTip.showText(self.mapToGlobal(self.rect().center()), self.note_name)
+        QToolTip.showText(self.mapToGlobal(self.rect().center()), self.note_name)
         # self.button.setToolTip()
         if not self.selected:
-            self.button.setIcon(QIcon("style/note_enter.png"))
+            self.note_button_widget.setIcon(QIcon("style/note_enter.png"))
         super().enterEvent(event)
 
     def leaveEvent(self, event):
         if not self.selected:
-            self.button.setIcon(QIcon("style/note_leave.png"))
+            self.note_button_widget.setIcon(QIcon("style/note_leave.png"))
         super().leaveEvent(event)
