@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3fdd768a-4c43-4f8f-9970-02668787d6df" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/note_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/note_data.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/app_ui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ferrmo_notes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ferrmo_notes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ferrmo_widgets.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ferrmo_widgets.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/style_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/style_util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

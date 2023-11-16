@@ -3,11 +3,13 @@ from PyQt6.QtWidgets import (QToolButton, QLabel, QVBoxLayout, QWidget,
 from PyQt6.QtGui import QIcon, QFont
 from PyQt6.QtCore import QSize, Qt, QRect
 import json
+from src.style_util import Notification
 
 
 class FerrmoNote(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
+        self.notification = None
         self._parent = parent
         self.out_dir = "data/"
         self.file_name = "note_data.json"
@@ -37,7 +39,7 @@ class FerrmoNote(QWidget):
         self.note_button_widget.setIcon(icon)
         # self.note_button_widget.setIconSize(QSize(76, 92))
         size = icon.pixmap(icon.availableSizes()[0])
-        self.icon_width = size.width() // 2+2
+        self.icon_width = size.width() // 2 + 2
         self.icon_height = size.height() // 2
         self.note_button_widget.setFixedSize(self.icon_width, self.icon_height)
 
@@ -95,6 +97,14 @@ class FerrmoNote(QWidget):
         self._parent.unselect_note()  # Uses higher level widget reference to communicate with lower level widget.
         self.button_select_UI()
 
+    def showNotification(self, title, description, color=(36, 94, 189), timeout=1000000):
+        self.notification = Notification()
+        self.notification.setNotify(title, description, color, timeout, use_exit_button=False)
+        notif_popup = QRect(self._parent._parent.x() + self._parent._parent.width - self.notification.width(),
+                            self._parent._parent.y() + self._parent._parent.sideBar_minHeight - 10,
+                            self.notification.m.messageLabel.width(), self.notification.m.messageLabel.height())
+        self.notification.setGeometry(notif_popup)
+
     def delete_note_data(self):
         file_path = self.out_dir + self.file_name
         with open(file_path, 'r') as f:
@@ -116,7 +126,7 @@ class FerrmoNote(QWidget):
         font = QFont("Segoe UI", 10)
         font.setBold(True)
         self.note_label_widget.setFont(font)
-        self.setButtonFixedSize(self.icon_width+15, self.icon_height+15)
+        self.setButtonFixedSize(self.icon_width + 15, self.icon_height + 15)
         self.note_button_widget.setIcon(QIcon("style/note_selected.png"))
 
     def button_unselect_UI(self):
@@ -124,7 +134,7 @@ class FerrmoNote(QWidget):
         font = QFont("Segoe UI", 9)
         font.setBold(True)
         self.note_label_widget.setFont(font)
-        self.setButtonFixedSize(self.icon_width-15, self.icon_height-15)
+        self.setButtonFixedSize(self.icon_width - 15, self.icon_height - 15)
         self.note_label_widget.setStyleSheet("color: rgb(255,255,255);")
         self.note_button_widget.setIcon(QIcon("style/note_leave.png"))
 
@@ -135,13 +145,13 @@ class FerrmoNote(QWidget):
         super().resizeEvent(event)
 
     def enterEvent(self, event):
-        QToolTip.showText(self.mapToGlobal(self.rect().center()), self.note_name)
-        # self.button.setToolTip()
+        self.showNotification("Note Name:", f"<h3>{self.note_name}</h3>", color=(0, 60, 0))
         if not self.selected:
             self.note_button_widget.setIcon(QIcon("style/note_enter.png"))
         super().enterEvent(event)
 
     def leaveEvent(self, event):
+        self.notification.closeMe()
         if not self.selected:
             self.note_button_widget.setIcon(QIcon("style/note_leave.png"))
         super().leaveEvent(event)

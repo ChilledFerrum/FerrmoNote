@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import (QWidget, QLabel, QVBoxLayout, QGridLayout,
-                             QPushButton)
+                             QPushButton, QSizePolicy)
 from PyQt6.QtGui import (QPainter, QColor, QLinearGradient,
                          QFont, QIcon)
 from PyQt6.QtCore import QPointF, QTimer, Qt, QSize
@@ -43,24 +43,35 @@ class GradientBackground(QWidget):
 
 
 class Message(QWidget):
-    def __init__(self, title, message, parent=None):
+    def __init__(self, title, message, use_exit_button, parent=None):
         QWidget.__init__(self, parent)
-        self.setLayout(QGridLayout())
+        if use_exit_button:
+            self.setLayout(QGridLayout())
+        else:
+            self.setLayout(QVBoxLayout())
         self.titleLabel = QLabel(title, self)
         self.titleLabel.setStyleSheet("font-size: 18px; font-weight: bold; padding: 0; text-align:center;")
         self.messageLabel = QLabel(message, self)
+        self.messageLabel.setWordWrap(True)
         self.messageLabel.setStyleSheet("font-size: 12px; font-weight: normal; padding: 0; text-align: center;")
+        self.messageLabel.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.setContentsMargins(0, 0, 0, 0)
+        self.setMinimumSize(200, 50)
+        self.adjustSize()
 
         # Button
-        self.buttonClose = QPushButton(self)
-        self.buttonClose.setIcon(QIcon("style/close_icon.png"))
-        self.buttonClose.setFlat(True)
-        self.buttonClose.setFixedSize(32, 32)
-        self.buttonClose.setIconSize(QSize(16, 16))
 
         self.layout().addWidget(self.titleLabel)
-        self.layout().addWidget(self.messageLabel, 2, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
-        self.layout().addWidget(self.buttonClose, 0, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
+        if use_exit_button:
+            self.buttonClose = QPushButton(self)
+            self.buttonClose.setIcon(QIcon("style/close_icon.png"))
+            self.buttonClose.setFlat(True)
+            self.buttonClose.setFixedSize(32, 32)
+            self.buttonClose.setIconSize(QSize(16, 16))
+            self.layout().addWidget(self.messageLabel, 2, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
+            self.layout().addWidget(self.buttonClose, 0, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
+        else:
+            self.layout().addWidget(self.messageLabel, alignment=Qt.AlignmentFlag.AlignHCenter)
 
 
 class Notification(QWidget):
@@ -69,12 +80,19 @@ class Notification(QWidget):
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
         self.mainLayout = QVBoxLayout(self)
 
-    def setNotify(self, title, description, color, timeout):
-        self.m = Message(title, description)
+        # Required to supress several warnings
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.adjustSize()
+
+
+    def setNotify(self, title, description, color, timeout, use_exit_button=True):
+        self.m = Message(title, description, use_exit_button)
         self.mainLayout.addWidget(self.m, alignment=Qt.AlignmentFlag.AlignHCenter)
         r, g, b = color
         self.setStyleSheet(f"background: rgb({r}, {g}, {b}); padding: 0;")
-        self.m.buttonClose.clicked.connect(self.onClicked)
+
+        if use_exit_button:
+            self.m.buttonClose.clicked.connect(self.onClicked)
         self.show()
         QTimer.singleShot(timeout, self.closeMe)
 
@@ -97,7 +115,4 @@ class FerrmoLabel(QLabel):
 
     def setColor(self, color):
         self.setStyleSheet(f"color:{color}")
-    # def stylize_Label(self):
-    #     style_sheet = """
-    #
-    #     """
+
