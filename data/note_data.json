@@ -12,5 +12,12 @@
         "Category": "Undefined",
         "note_title": "Alignment Fixes",
         "text_contents": "Fixed the Alignments of several widgets, in order to look more appropriate, user friendly and attractive."
+    },
+    {
+        "datetime": "2023-11-17 02:54:29",
+        "_id": 2,
+        "Category": "Undefined",
+        "note_title": "Added Badges",
+        "text_contents": "New badges were added to the repository for it to look pretty!"
     }
 ]
