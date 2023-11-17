@@ -8,7 +8,7 @@
 If you'd like to contribute to this project, please feel free to create an issue for the better development of this project. <br/>
 It will support dynamic note management for the user to manage their information based on their needs. <br/>
 This project is currently very early in development
-
+![](https://github.com/ChilledFerrum/FerrmoNote/FerrmoNote_intro.gif)
 
 ### Installation...
 ```commandline
