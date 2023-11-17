@@ -1,5 +1,8 @@
 # FerrmoNote
-> FerrmoNote is a GUI Application used to create notes and store your information, private or not.
+![Python](https://img.shields.io/badge/python-%2314354C.svg?style=for-the-badge&logo=python&logoColor=white) ![Qt](https://img.shields.io/badge/Qt-%23217346.svg?style=for-the-badge&logo=Qt&logoColor=white) ![Version](https://img.shields.io/static/v1?label=Version&message=0.1.3&labelColor=212121&color=ff422e&style=for-the-badge) ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/t/ChilledFerrum/FerrmoNote)
+<a href="https://circleci.com/gh/badges/shields/tree/master">
+    <img src="https://img.shields.io/circleci/project/github/badges/shields/master" alt="build status"></a>
+<a href="https://circleci.com/gh/badges/daily-tests">
 
 ## This application is currently still in development
 If you'd like to contribute to this project, please feel free to create an issue for the better development of this project. <br/>
