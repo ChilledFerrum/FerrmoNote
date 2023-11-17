@@ -6,7 +6,7 @@ from PyQt6.QtCore import QRect
 from src.ferrmo_buttons import FerrmoButton
 # Notifications Credit to Axel Schneider
 from src.style_util import Notification
-from src.ferrmo_widgets import AddButtonWidget
+from src.ferrmo_widgets import AddButtonWidget, ViewNote_Widget
 import pandas as pd
 from src.main_board_ui import MainFrameUI
 from src.ferrmo_notes import FerrmoNote
@@ -21,7 +21,7 @@ class Ferrmo(QWidget):
         self.mainFrame = None  # Entire App Frame
 
         self.saved_state = None
-        print("Active")
+
         self.mainFrameUI = None  # Main Frame UI Contains Note History
         self.notification = None  # Pop-up Notifications
         self.gridLayout = None  # Grid Layout to hold Note History
@@ -30,6 +30,8 @@ class Ferrmo(QWidget):
         self.height = size[1]
         self.gradient_start = (0, 0, 0)
         self.gradient_end = (142, 142, 142)
+
+        self.is_active_widgets_list = [AddButtonWidget, ViewNote_Widget]
 
         # Refresh with each update
         self.update()
@@ -100,11 +102,23 @@ class Ferrmo(QWidget):
                   self.notification.m.messageLabel.height())
         self.notification.setGeometry(r)
 
+    def check_widget_activity(self):
+        active_widget = self.mainLayout.itemAt(1).widget()
+        if any(isinstance(active_widget, is_active_widget) for is_active_widget in self.is_active_widgets_list):
+            active_widget.closeMe()
+
     def viewNote(self):
-        pass
+        self.check_widget_activity()
+        for note in self.notesList:
+            if note.selected:
+                view_note_widget = ViewNote_Widget(self, note, self.gradient_start, self.gradient_end)
+                self.mainLayout.insertWidget(1, view_note_widget)
 
     def addNote(self, event):
-        add_button_widget = AddButtonWidget(self, self.gradient_start, self.gradient_end)
+        self.check_widget_activity()
+        add_button_widget = AddButtonWidget(self,
+                                            self.gradient_start,
+                                            self.gradient_end)
         self.mainLayout.insertWidget(1, add_button_widget)
 
     def searchNote(self, event):

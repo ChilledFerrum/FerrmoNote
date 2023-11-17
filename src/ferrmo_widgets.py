@@ -1,15 +1,17 @@
 from src.style_util import FerrmoLabel
 from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QWidget, QPlainTextEdit,
                              QLineEdit)
+from PyQt6.QtCore import Qt
 from src.ferrmo_buttons import FerrmoButton
 from src.ferrmo_notes import FerrmoNote
+from src.style_util import GradientBackground
 from datetime import datetime
 import json
 
 
-class AddButtonWidget(QWidget):
+class AddButtonWidget(GradientBackground):
     def __init__(self, parent, gradient_start, gradient_end):
-        super().__init__(parent)
+        super().__init__(parent.width, parent.height, gradient_start, gradient_end)
         self.submit_button = FerrmoButton(self, text="Submit", pressedColor="#069647")
         self.cancel_button = FerrmoButton(self, text="Cancel", pressedColor="#940303")
 
@@ -76,10 +78,6 @@ class AddButtonWidget(QWidget):
         self.layout.addWidget(buttons_widget)
         self.setLayout(self.layout)
 
-    def cancel_button_func(self):
-        self.close()
-        del self
-
     def submit_button_func(self):
         self.new_button = True
         new_Note = FerrmoNote(self._parent.mainFrameUI)  # Fixed incorrect parent reference
@@ -98,7 +96,8 @@ class AddButtonWidget(QWidget):
         self._parent.notesList.append(new_Note)
         self._parent.update_notes(clear_data=False)  # Visualizes in parent frame MainFrameUI
         self._parent.showNotification(f"New Button Created", self.note_name.text())
-        self.close()
+        self.closeMe()
+
 
     def get_last_note_id(self):
         with open(self.out_dir + self.file_name, "r") as f:
@@ -119,7 +118,71 @@ class AddButtonWidget(QWidget):
 
     def setup_button_connections(self):
         self.submit_button.clicked.connect(self.submit_button_func)
-        self.cancel_button.clicked.connect(self.cancel_button_func)
+        self.cancel_button.clicked.connect(self.closeMe)
 
     def has_new_button(self):
         return self.new_button
+
+    def delWidgets(self):
+        self.submit_button.deleteLater()
+        self.cancel_button.deleteLater()
+        self.note_name.deleteLater()
+        self.text_area.deleteLater()
+        self.layout.deleteLater()
+
+    def closeMe(self):
+        self.close()
+        self.delWidgets()
+        widget = self._parent.mainLayout.takeAt(1).widget().deleteLater()
+        del self
+
+class ViewNote_Widget(GradientBackground):
+    def __init__(self, parent, note, gradient_start, gradient_end):
+        super().__init__(parent.width, parent.height, gradient_start, gradient_end)
+        # Class data
+        self.note = note
+        self.parent = parent
+
+        # Widget data
+        self.title_label = None
+        self.text_content = None
+        self.exit_button = FerrmoButton(self, text="Done!", pressedColor="#006400")
+        self.exit_button.clicked.connect(self.Done_button)
+
+        self.widget_layout = QVBoxLayout()
+        self.initWidget()
+
+    def Done_button(self):
+        self.closeMe()
+
+    def initWidget(self):
+        self.title_label = FerrmoLabel(self.note.note_name,
+                                       font_size=15,
+                                       color="WHITE",
+                                       is_bold=True)
+
+        self.text_content = FerrmoLabel(text=self.note.text_contents,
+                                        font_family="sans-serif typefaces",
+                                        font_size=10,
+                                        color="WHITE")
+        self.text_content.setWordWrap(True)
+        self.setFixedSize(self.parent.mainFrameUI._width, self.parent.mainFrameUI._height-200)
+        self.addWidgets()  # Adds widgets to the layout
+
+    def addWidgets(self):
+        self.widget_layout.addWidget(self.title_label, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.widget_layout.addWidget(self.text_content, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.widget_layout.addWidget(self.exit_button, alignment=Qt.AlignmentFlag.AlignRight)
+        self.setLayout(self.widget_layout) # Vertical Box Layout
+
+    def delWidgets(self):
+        self.title_label.deleteLater()
+        self.text_content.deleteLater()
+        self.exit_button.deleteLater()
+        self.widget_layout.deleteLater()
+
+    def closeMe(self):
+        self.close()
+        self.delWidgets()
+        self.parent.mainLayout.takeAt(1).widget().deleteLater()
+        del self
