@@ -7,8 +7,9 @@
 ## This application is currently still in development
 If you'd like to contribute to this project, please feel free to create an issue for the better development of this project. <br/>
 It will support dynamic note management for the user to manage their information based on their needs. <br/>
-This project is currently very early in development
-![](https://github.com/ChilledFerrum/FerrmoNote/FerrmoNote_intro.gif)
+This project is currently very early in development <br/>
+<img src="FerrmoNote_intro.gif" style="display: block; margin: auto; width: 650px; height: 650px;"> <br/>
+
 
 ### Installation...
 ```commandline
