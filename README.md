@@ -26,12 +26,11 @@ $ python Ferrmo.py
 ```
 
 ### Troubleshoot for Linux <br/>
-For the following error
 ```
 qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
 This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
 ```
-Check if the following command fixes works for you
+In the case of the above error, a possible fix is to install any necessary xcb plugins for your device.
 ```
 sudo apt install libxcb-*
 ```
