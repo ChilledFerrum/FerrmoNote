@@ -4,6 +4,12 @@
     <img src="https://img.shields.io/circleci/project/github/badges/shields/master" alt="build status"></a>
 <a href="https://circleci.com/gh/badges/daily-tests">
 
+> Improve your quality of life by storing important information, goals, to-do items, and more.
+
+<p align="center">
+    <img src="https://github.com/ChilledFerrum/FerrmoNote/blob/32cca807a42b3ba3f551c9a9a0f1300f78ee7dc5/assets/FerrmoNote_banner.png"/>
+</p>
+
 ## This application is currently still in development
 If you'd like to contribute to this project, please feel free to create an issue for the better development of this project. <br/>
 It will support dynamic note management for the user to manage their information based on their needs. <br/>
