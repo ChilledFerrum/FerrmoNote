@@ -2,7 +2,7 @@ import sys
 
 from PyQt6.QtWidgets import (QApplication, QVBoxLayout, QHBoxLayout,
                              QWidget, QGridLayout)
-from PyQt6.QtCore import QRect
+from PyQt6.QtCore import QRectF
 from src.ferrmo_buttons import FerrmoButton
 # Notifications Credit to Axel Schneider
 from src.style_util import Notification
@@ -94,28 +94,29 @@ class Ferrmo(QWidget):
         self.mainLayout.addWidget(self.mainFrameUI)
         self.mainLayout.addWidget(self.frameSideBar)
 
-    def showNotification(self, title, description, color=(36, 94, 189), timeout=3000):
-        self.notification = Notification()
-        self.notification.setNotify(title, description, color, timeout)
-        r = QRect(self.x() + round(self.width / 2) - round(self.notification.width() / 2),
+    def showNotification(self, title, description, color=(36, 94, 189), border_color=(255, 255, 255), timeout=3000):
+        self.notification = Notification(self.mainFrameUI)
+        self.notification.setNotify(title, description, color, border_color, timeout)
+        r = QRectF(self.x() + round(self.width / 2) - round(self.notification.width() / 2),
                   self.y() + 26, self.notification.m.messageLabel.width() + 30,
                   self.notification.m.messageLabel.height())
-        self.notification.setGeometry(r)
 
-    def check_widget_activity(self):
+        self.notification.setGeometry(r.toRect())
+
+    def close_active_widget(self):
         active_widget = self.mainLayout.itemAt(1).widget()
         if any(isinstance(active_widget, is_active_widget) for is_active_widget in self.is_active_widgets_list):
             active_widget.closeMe()
 
     def viewNote(self):
-        self.check_widget_activity()
+        self.close_active_widget()
         for note in self.notesList:
             if note.selected:
                 view_note_widget = ViewNote_Widget(self, note, self.gradient_start, self.gradient_end)
                 self.mainLayout.insertWidget(1, view_note_widget)
 
     def addNote(self, event):
-        self.check_widget_activity()
+        self.close_active_widget()
         add_button_widget = AddButtonWidget(self,
                                             self.gradient_start,
                                             self.gradient_end)
@@ -154,7 +155,7 @@ class Ferrmo(QWidget):
             self.update_notes()
             self.showNotification("Loaded Notes", f"Loaded {len(self.notesList)} notes")
         else:
-            self.showNotification("Warning!", "<b>No notes to load<b><br/>\n note_data.json Empty", color=(255, 140, 0))
+            self.showNotification("Warning!", "<b>No notes to load<b><br/>\n note_data.json Empty", color=(255, 140, 0), border_color=(200, 0, 0))
 
     def settings(self, event):
         print("Clicked Settings!")
