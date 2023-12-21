@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import (QWidget, QLabel, QVBoxLayout, QGridLayout,
                              QPushButton, QSizePolicy)
-from PyQt6.QtGui import (QPainter, QColor, QLinearGradient,
-                         QFont, QIcon)
-from PyQt6.QtCore import QPointF, QTimer, Qt, QSize
+from PyQt6.QtGui import (QColor, QLinearGradient,
+                         QFont, QIcon, QPainter, QPainterPath, QPen, QBrush)
+from PyQt6.QtCore import QPointF, QTimer, Qt, QSize, QRectF
 
 
 class GradientBackground(QWidget):
@@ -51,16 +51,18 @@ class Message(QWidget):
         else:
             self.setLayout(QVBoxLayout())
         self.titleLabel = QLabel(title, self)
-        self.titleLabel.setStyleSheet("font-size: 18px; font-weight: bold; padding: 0; text-align:center;")
         self.messageLabel = QLabel(message, self)
+
+        self.titleLabel.setStyleSheet("font-size: 18px; font-weight: bold; padding: 0; text-align:center;")
+        self.titleLabel.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
         self.messageLabel.setWordWrap(True)
         self.messageLabel.setStyleSheet("font-size: 12px; font-weight: normal; padding: 0; text-align: center;")
         self.messageLabel.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.messageLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
         self.setContentsMargins(0, 0, 0, 0)
         self.setMinimumSize(200, 50)
         self.adjustSize()
-
-        # Button
 
         self.layout().addWidget(self.titleLabel)
         if use_exit_button:
@@ -78,24 +80,53 @@ class Message(QWidget):
 class Notification(QWidget):
     def __init__(self, parent=None):
         super(QWidget, self).__init__(parent=None)
+        self.bordersize = None
+        self.borderColor = None
+        self.backgroundColor = None
+        self.setAutoFillBackground(True)
+
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
         self.mainLayout = QVBoxLayout(self)
-
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         # Required to supress several warnings
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.adjustSize()
 
-
-    def setNotify(self, title, description, color, timeout, use_exit_button=True):
+    def setNotify(self, title, description, color, border_color, timeout, use_exit_button=True):
         self.m = Message(title, description, use_exit_button)
         self.mainLayout.addWidget(self.m, alignment=Qt.AlignmentFlag.AlignHCenter)
         r, g, b = color
-        self.setStyleSheet(f"background: rgb({r}, {g}, {b}); padding: 0;")
+        br, bg, bb = border_color
+
+        self.backgroundColor = QColor(r, g, b)
+        self.borderColor = QColor(br, bg, bb)
 
         if use_exit_button:
             self.m.buttonClose.clicked.connect(self.onClicked)
         self.show()
         QTimer.singleShot(timeout, self.closeMe)
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+
+        path = QPainterPath()
+        self.bordersize = 4
+        pen = QPen(self.borderColor, self.bordersize)
+
+        painter.setPen(pen)
+
+        rect = QRectF(self.rect())
+        path.addRoundedRect(rect, 15, 15)  # RectShape, xRad, yRad
+
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceOut)
+        painter.fillPath(path, Qt.GlobalColor.transparent)
+        painter.fillRect(self.rect(), Qt.GlobalColor.transparent)
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceOver)
+
+        painter.setClipPath(path)
+        painter.fillRect(self.rect(), self.backgroundColor)
+        painter.strokePath(path, painter.pen())
 
     def closeMe(self):
         self.close()
@@ -116,4 +147,3 @@ class FerrmoLabel(QLabel):
 
     def setColor(self, color):
         self.setStyleSheet(f"color:{color}")
-
