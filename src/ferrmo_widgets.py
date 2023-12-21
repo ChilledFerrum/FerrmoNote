@@ -98,7 +98,6 @@ class AddButtonWidget(GradientBackground):
         self._parent.showNotification(f"New Button Created", self.note_name.text())
         self.closeMe()
 
-
     def get_last_note_id(self):
         with open(self.out_dir + self.file_name, "r") as f:
             data = json.load(f)
@@ -136,6 +135,7 @@ class AddButtonWidget(GradientBackground):
         widget = self._parent.mainLayout.takeAt(1).widget().deleteLater()
         del self
 
+
 class ViewNote_Widget(GradientBackground):
     def __init__(self, parent, note, gradient_start, gradient_end):
         super().__init__(parent.width, parent.height, gradient_start, gradient_end)
@@ -148,6 +148,7 @@ class ViewNote_Widget(GradientBackground):
         self.text_content = None
         self.exit_button = FerrmoButton(self, text="Done!", pressedColor="#006400")
         self.exit_button.clicked.connect(self.Done_button)
+
 
         self.widget_layout = QVBoxLayout()
         self.initWidget()
@@ -166,14 +167,14 @@ class ViewNote_Widget(GradientBackground):
                                         font_size=10,
                                         color="WHITE")
         self.text_content.setWordWrap(True)
-        self.setFixedSize(self.parent.mainFrameUI._width, self.parent.mainFrameUI._height-200)
+        self.setFixedSize(self.parent.mainFrameUI._width, self.parent.mainFrameUI._height - 200)
         self.addWidgets()  # Adds widgets to the layout
 
     def addWidgets(self):
         self.widget_layout.addWidget(self.title_label, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.widget_layout.addWidget(self.text_content, alignment=Qt.AlignmentFlag.AlignHCenter)
         self.widget_layout.addWidget(self.exit_button, alignment=Qt.AlignmentFlag.AlignRight)
-        self.setLayout(self.widget_layout) # Vertical Box Layout
+        self.setLayout(self.widget_layout)  # Vertical Box Layout
 
     def delWidgets(self):
         self.title_label.deleteLater()
@@ -185,4 +186,5 @@ class ViewNote_Widget(GradientBackground):
         self.close()
         self.delWidgets()
         self.parent.mainLayout.takeAt(1).widget().deleteLater()
+
         del self

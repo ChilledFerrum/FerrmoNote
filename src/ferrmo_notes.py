@@ -1,8 +1,10 @@
-from PyQt6.QtWidgets import (QToolButton, QLabel, QVBoxLayout, QWidget,
-                             QSizePolicy, QToolTip)
-from PyQt6.QtGui import QIcon, QFont
-from PyQt6.QtCore import QSize, Qt, QRect
 import json
+
+from PyQt6.QtCore import QSize, Qt, QRect
+from PyQt6.QtGui import QIcon, QFont
+from PyQt6.QtWidgets import (QToolButton, QLabel, QVBoxLayout, QWidget,
+                             QSizePolicy)
+
 from src.style_util import Notification
 
 
@@ -42,7 +44,7 @@ class FerrmoNote(QWidget):
         self.icon_width = size.width() // 2 + 2
         self.icon_height = size.height() // 2
 
-        self.note_button_widget.setFixedSize(self.icon_width, self.icon_height)
+        self.note_button_widget.setFixedSize(self.icon_width, self.icon_height+2)
         self.note_button_widget.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
         self.note_button_widget.setStyleSheet("text-align: center; border: 0px solid black;")
         self.note_button_widget.setGeometry(-15, -15, self.icon_width, self.icon_height)
@@ -98,9 +100,9 @@ class FerrmoNote(QWidget):
         self._parent.unselect_note()  # Uses higher level widget reference to communicate with lower level widget.
         self.button_select_UI()
 
-    def showNotification(self, title, description, color=(36, 94, 189), timeout=1000000):
+    def showNotification(self, title, description, color=(36, 94, 189), border_color=(255, 255, 255), timeout=1000000):
         self.notification = Notification()
-        self.notification.setNotify(title, description, color, timeout, use_exit_button=False)
+        self.notification.setNotify(title, description, color, border_color, timeout, use_exit_button=False)
         notif_popup = QRect(self._parent._parent.x() + self._parent._parent.width - self.notification.width(),
                             self._parent._parent.y() + self._parent._parent.sideBar_minHeight - 10,
                             self.notification.m.messageLabel.width(), self.notification.m.messageLabel.height())
@@ -148,7 +150,7 @@ class FerrmoNote(QWidget):
         super().resizeEvent(event)
 
     def enterEvent(self, event):
-        self.showNotification("Note Name:", f"<h3>{self.note_name}</h3>", color=(0, 60, 0))
+        self.showNotification("Note Name:", f"<h3>{self.note_name}</h3>", color=(0, 60, 0), border_color=(255, 100, 0))
         if not self.selected:
             self.note_button_widget.setIcon(QIcon("style/note_enter.png"))
         super().enterEvent(event)
